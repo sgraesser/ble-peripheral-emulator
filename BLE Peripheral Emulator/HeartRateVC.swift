@@ -42,6 +42,8 @@ class HeartRateVC: UIViewController {
 	@IBOutlet var heartRateTF: UITextField!
 	@IBOutlet var energyExpendedTF: UITextField!
 	
+	private var activeTextField: UITextField!
+
 	private var bodySensorValues = [String]()
 	private var selectedIndex = 0
 	private var pickerView: UIPickerView!
@@ -71,8 +73,26 @@ class HeartRateVC: UIViewController {
 		
 		heartRateTF.inputAccessoryView = createAccessoryToolbar(with: #selector(doneHeartRateTF(_:)))
 		energyExpendedTF.inputAccessoryView = createAccessoryToolbar(with: #selector(doneEnergyExpendedTF(_:)))
+		heartRateTF.delegate = self
+		energyExpendedTF.delegate = self
     }
     
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		
+		let center = NotificationCenter.default
+		center.addObserver(self, selector: #selector(keyboardDidShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+		center.addObserver(self, selector: #selector(keyboardDidHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		
+		let center = NotificationCenter.default
+		center.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+		center.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+	}
+
 	// MARK: - Private
 	
 	private func convertHeartRate() -> Data {
@@ -186,6 +206,37 @@ class HeartRateVC: UIViewController {
 		
 		energyExpendedTF.endEditing(true)
 	}
+	
+	@objc func keyboardDidShow(_ notification: Notification) {
+		guard
+			let info = notification.userInfo as? [String: Any],
+			let keyboardRect = info[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+			activeTextField != nil,
+			self.view.frame.origin.y >= 0 else {
+			return
+		}
+		
+		var aRect = self.view.frame
+		aRect.size.height -= keyboardRect.size.height
+		let testFrame = self.activeTextField.convert(self.activeTextField.frame, to: self.view)
+		let newTextFieldY = aRect.size.height - 30
+		
+		// Checking if the text field is really hidden behind the keyboard
+		if !aRect.contains(testFrame.origin) {
+			UIView.animate(withDuration: 0.25, delay: 0.0, options: .curveEaseIn, animations: {
+				let bounds = self.view.bounds
+				let y = self.view.frame.origin.y - (testFrame.origin.y - newTextFieldY)
+				self.view.frame = CGRect(x: 0, y: y, width: bounds.width, height: bounds.height)
+			}, completion: nil)
+		}
+	}
+	
+	@objc func keyboardDidHide(_ notification: Notification) {
+		UIView.animate(withDuration: 0.25, delay: 0.0, options: .curveEaseIn, animations: {
+			let bounds = self.view.bounds
+			self.view.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
+		}, completion: nil)
+	}
 }
 
 extension HeartRateVC: CBPeripheralManagerDelegate {
@@ -289,5 +340,20 @@ extension HeartRateVC: UIPickerViewDelegate {
 		if pickerView == self.pickerView {
 			selectedIndex = row
 		}
+	}
+}
+
+extension HeartRateVC: UITextFieldDelegate {
+	func textFieldDidBeginEditing(_ textField: UITextField) {
+		activeTextField = textField
+	}
+	
+	func textFieldDidEndEditing(_ textField: UITextField) {
+		activeTextField = nil
+	}
+	
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return true
 	}
 }
