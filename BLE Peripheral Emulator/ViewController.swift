@@ -12,6 +12,7 @@ class ViewController: UIViewController {
 	
 	@IBOutlet var battery: UIButton!
 	@IBOutlet var heartRateMonitor: UIButton!
+	@IBOutlet var healthThermometer: UIButton!
 
 	override func viewDidLoad() {
 		super.viewDidLoad()

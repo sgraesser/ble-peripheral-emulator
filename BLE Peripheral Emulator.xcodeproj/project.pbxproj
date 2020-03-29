@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AA1B8CA02431246900240D90 /* HeartRateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B8C9F2431246900240D90 /* HeartRateVC.swift */; };
+		AA1B8CA22431297D00240D90 /* ThermometerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1B8CA12431297D00240D90 /* ThermometerVC.swift */; };
 		AA76383A241EF10700FDFAC2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA763839241EF10700FDFAC2 /* AppDelegate.swift */; };
 		AA76383C241EF10700FDFAC2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA76383B241EF10700FDFAC2 /* SceneDelegate.swift */; };
 		AA76383E241EF10700FDFAC2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA76383D241EF10700FDFAC2 /* ViewController.swift */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		AA1B8C9F2431246900240D90 /* HeartRateVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartRateVC.swift; sourceTree = "<group>"; };
+		AA1B8CA12431297D00240D90 /* ThermometerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThermometerVC.swift; sourceTree = "<group>"; };
 		AA763836241EF10700FDFAC2 /* BLE Peripheral Emulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BLE Peripheral Emulator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA763839241EF10700FDFAC2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA76383B241EF10700FDFAC2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				AA76383F241EF10700FDFAC2 /* Main.storyboard */,
 				AA76384D241F204E00FDFAC2 /* BatteryServiceVC.swift */,
 				AA1B8C9F2431246900240D90 /* HeartRateVC.swift */,
+				AA1B8CA12431297D00240D90 /* ThermometerVC.swift */,
 				AA763842241EF10900FDFAC2 /* Assets.xcassets */,
 				AA763844241EF10900FDFAC2 /* LaunchScreen.storyboard */,
 				AA763847241EF10900FDFAC2 /* Info.plist */,
@@ -149,6 +152,7 @@
 				AA76383A241EF10700FDFAC2 /* AppDelegate.swift in Sources */,
 				AA76384E241F204E00FDFAC2 /* BatteryServiceVC.swift in Sources */,
 				AA76383C241EF10700FDFAC2 /* SceneDelegate.swift in Sources */,
+				AA1B8CA22431297D00240D90 /* ThermometerVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
