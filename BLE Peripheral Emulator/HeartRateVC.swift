@@ -43,6 +43,7 @@ class HeartRateVC: UIViewController {
 	@IBOutlet var energyExpendedTF: UITextField!
 	
 	private var activeTextField: UITextField!
+	private let numberFormatter = NumberFormatter()
 
 	private var bodySensorValues = [String]()
 	private var selectedIndex = 0
@@ -109,6 +110,18 @@ class HeartRateVC: UIViewController {
 		}
 		
 		return value
+	}
+	
+	/// Notifiy the user that an invalid number has been entered.
+	/// - Parameters:
+	///   - text: Why the number is invalid
+	///   - handler: What to do after the alert has been dismissed (e.g. reset the field to the original value)
+	private func invalidNumberAlert(_ text: String, handler: ((UIAlertAction) -> Void)? = nil) {
+		let alert = UIAlertController(title: "Invalid Input", message: text, preferredStyle: .alert)
+		let okButton = UIAlertAction(title: "Ok", style: .default, handler: handler)
+		alert.addAction(okButton)
+		
+		present(alert, animated: true, completion: nil)
 	}
 
     /*
@@ -184,7 +197,17 @@ class HeartRateVC: UIViewController {
 	}
 	
 	@objc func doneHeartRateTF(_ sender: UIBarButtonItem) {
-		heartRate = UInt16(heartRateTF.text ?? "0") ?? 0
+		let range = 1...65535
+		guard let aNumber = numberFormatter.number(from: heartRateTF.text!),
+			range ~= aNumber.intValue else {
+			let msg = "Invalid number entered. Please enter a number between \(range.lowerBound) and \(range.upperBound)"
+			invalidNumberAlert(msg) { (action) in
+				self.heartRateTF.text = String(self.heartRate)
+			}
+			
+			return
+		}
+		heartRate = aNumber.uint16Value
 		if heartRate > 255 {
 			heartRateFlags.update(with: .bpm16Bit)
 		}
@@ -196,7 +219,17 @@ class HeartRateVC: UIViewController {
 	}
 	
 	@objc func doneEnergyExpendedTF(_ sender: UIBarButtonItem) {
-		energyExpended = UInt16(heartRateTF.text ?? "0") ?? 0
+		let range = 0...65535
+		guard let aNumber = numberFormatter.number(from: energyExpendedTF.text!),
+			range ~= aNumber.intValue else {
+			let msg = "Invalid number entered. Please enter a number between \(range.lowerBound) and \(range.upperBound)"
+			invalidNumberAlert(msg) { (action) in
+				self.energyExpendedTF.text = String(self.energyExpended)
+			}
+		
+			return
+		}
+		energyExpended = aNumber.uint16Value
 		if energyExpended > 0 {
 			heartRateFlags.update(with: .energyExpended)
 		}

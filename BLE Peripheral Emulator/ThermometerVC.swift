@@ -38,6 +38,7 @@ class ThermometerVC: UIViewController {
 	@IBOutlet var measurementIntervalTF: UITextField!
 	
 	private var activeTextField: UITextField!
+	private let numberFormatter = NumberFormatter()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,6 +104,18 @@ class ThermometerVC: UIViewController {
 		let x = (tempInF + 40) * (5/9) - 40
 		return x
 	}
+	
+	/// Notifiy the user that an invalid number has been entered.
+	/// - Parameters:
+	///   - text: Why the number is invalid
+	///   - handler: What to do after the alert has been dismissed (e.g. reset the field to the original value)
+	private func invalidNumberAlert(_ text: String, handler: ((UIAlertAction) -> Void)? = nil) {
+		let alert = UIAlertController(title: "Invalid Input", message: text, preferredStyle: .alert)
+		let okButton = UIAlertAction(title: "Ok", style: .default, handler: handler)
+		alert.addAction(okButton)
+		
+		present(alert, animated: true, completion: nil)
+	}
 
     /*
     // MARK: - Navigation
@@ -155,13 +168,34 @@ class ThermometerVC: UIViewController {
 	// MARK: - Selector methods
 	
 	@objc func doneMeasurementIntervalTF(_ sender: UIBarButtonItem) {
-		measurementInterval = UInt16(measurementIntervalTF.text ?? "0") ?? 0
+		let range = 1...65535
+		guard let aNumber = numberFormatter.number(from: measurementIntervalTF.text!),
+			range ~= aNumber.intValue else {
+			let msg = "Invalid number entered. Please enter a number between \(range.lowerBound) and \(range.upperBound)"
+			invalidNumberAlert(msg) { (action) in
+				self.measurementIntervalTF.text = String(self.measurementInterval)
+			}
+			
+			return
+		}
+		measurementInterval = aNumber.uint16Value
 
 		measurementIntervalTF.endEditing(true)
 	}
 	
 	@objc func doneTempatureTF(_ sender: UIBarButtonItem) {
-		let tempInF = Float(tempatureTF.text ?? "0") ?? 0
+		let range = 0.0..<1000.0
+		guard let aNumber = numberFormatter.number(from: tempatureTF.text!),
+			range ~= aNumber.doubleValue else {
+			let msg = "Invalid number entered. Please enter a number between \(range.lowerBound) and \(range.upperBound)"
+			invalidNumberAlert(msg) { (action) in
+				let tempInF = self.convertCtoF(self.tempature)
+				self.tempatureTF.text = String(format: "%.1f", tempInF)
+			}
+			
+			return
+		}
+		let tempInF = aNumber.floatValue
 		tempature = convertFtoC(tempInF)
 		
 		// Update the display to show only 1 number after the decimal point
