@@ -226,14 +226,13 @@
         <!--Heart Rate Monitor-->
         <scene sceneID="rWj-hO-Jem">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mdP-0q-xbX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController id="AHx-gi-ek0" customClass="HeartRateVC" customModule="BLE_Peripheral_Emulator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Jq3-Il-2ac">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="49" translatesAutoresizingMaskIntoConstraints="NO" id="Gb1-UG-dS3">
-                                <rect key="frame" x="16" y="64" width="343" height="359.5"/>
+                                <rect key="frame" x="16" y="64" width="327" height="359.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="dcE-yB-0U5">
                                         <rect key="frame" x="0.0" y="0.0" width="215.5" height="57"/>
@@ -356,7 +355,7 @@
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Njg-ZT-CMc">
-                                        <rect key="frame" x="0.0" y="326.5" width="343" height="33"/>
+                                        <rect key="frame" x="0.0" y="326.5" width="327" height="33"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Notify"/>
                                         <connections>
@@ -371,9 +370,9 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="bBd-m2-5Xb" firstAttribute="trailing" secondItem="Gb1-UG-dS3" secondAttribute="trailing" constant="16" id="MLV-fq-TlB"/>
-                            <constraint firstItem="Gb1-UG-dS3" firstAttribute="leading" secondItem="bBd-m2-5Xb" secondAttribute="leading" constant="16" id="isp-fw-UMT"/>
-                            <constraint firstItem="Gb1-UG-dS3" firstAttribute="top" secondItem="bBd-m2-5Xb" secondAttribute="top" constant="20" id="jna-v1-ScP"/>
+                            <constraint firstItem="Gb1-UG-dS3" firstAttribute="top" secondItem="bBd-m2-5Xb" secondAttribute="top" constant="20" id="4ob-4h-eXe"/>
+                            <constraint firstItem="Gb1-UG-dS3" firstAttribute="leading" secondItem="bBd-m2-5Xb" secondAttribute="leading" constant="16" id="6d0-kz-qVk"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Gb1-UG-dS3" secondAttribute="trailing" constant="16" id="a9y-kB-9oD"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="bBd-m2-5Xb"/>
                     </view>
@@ -386,13 +385,13 @@
                         <outlet property="peripheralsConnected" destination="moC-Qk-kse" id="Ika-jQ-BXZ"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mdP-0q-xbX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2007" y="884"/>
         </scene>
         <!--Health Thermometer-->
         <scene sceneID="GPE-jW-I9e">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Aug-Qo-b33" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController id="Mgi-Rr-Lej" customClass="ThermometerVC" customModule="BLE_Peripheral_Emulator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GgN-ia-noJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -530,11 +529,12 @@
                     <navigationItem key="navigationItem" title="Health Thermometer" id="lFd-Lq-LtV"/>
                     <connections>
                         <outlet property="advertisingSwitch" destination="Fkj-XS-Toi" id="sTC-bi-F8s"/>
-                        <outlet property="measurementIntervalTF" destination="qmE-Ge-Rge" id="cKB-kl-rNc"/>
+                        <outlet property="measurementIntervalTF" destination="qmE-Ge-Rge" id="oGf-ov-7fU"/>
                         <outlet property="peripheralsConnected" destination="ytq-nI-1ed" id="yQf-XZ-OEP"/>
-                        <outlet property="tempatureTF" destination="KmG-UC-tam" id="DP5-xR-Liv"/>
+                        <outlet property="tempatureTF" destination="KmG-UC-tam" id="8fS-sl-34T"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Aug-Qo-b33" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2006" y="-670"/>
         </scene>
