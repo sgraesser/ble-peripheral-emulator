@@ -13,11 +13,21 @@ let heartRateService = CBUUID(string: "180D")
 let heartRateMeasurementUUID = CBUUID(string: "2A37")
 let heartRateSensorLocationUUID = CBUUID(string: "2A38")
 
+struct HRMFlagOptions: OptionSet {
+	let rawValue: UInt8
+	
+	static let bpm16Bit			= HRMFlagOptions(rawValue: 1 << 0)
+	static let sensorStatus1	= HRMFlagOptions(rawValue: 1 << 1)
+	static let sensorStatus2	= HRMFlagOptions(rawValue: 1 << 2)
+	static let energyExpended	= HRMFlagOptions(rawValue: 1 << 3)
+	static let rrInterval		= HRMFlagOptions(rawValue: 1 << 4)
+}
+
 class HeartRateVC: UIViewController {
 	private var peripheralManager: CBPeripheralManager!
 	
 	private var heartRate: UInt16 = 50
-	private var heartRateFlags: UInt8 = 0x01
+	private var heartRateFlags: HRMFlagOptions = []
 	private var bodySensor: UInt8 = 0
 	private var energyExpended: UInt16 = 0
 	
@@ -69,11 +79,11 @@ class HeartRateVC: UIViewController {
 		var value = Data(count: 1)
 		if (heartRate < 256) {
 			value = Data(count: 2)
-			value[0] = heartRateFlags
+			value[0] = heartRateFlags.rawValue
 			value[1] = UInt8(heartRate)
 		} else {
 			value = Data(count: 3)
-			value[0] = heartRateFlags
+			value[0] = heartRateFlags.rawValue
 			value[1] = UInt8(heartRate >> 8)
 			value[2] = UInt8(heartRate & 0xFF)
 		}
@@ -156,10 +166,10 @@ class HeartRateVC: UIViewController {
 	@objc func doneHeartRateTF(_ sender: UIBarButtonItem) {
 		heartRate = UInt16(heartRateTF.text ?? "0") ?? 0
 		if heartRate > 255 {
-			heartRateFlags = 0x01
+			heartRateFlags.update(with: .bpm16Bit)
 		}
 		else {
-			heartRateFlags = 0x00
+			heartRateFlags.remove(.bpm16Bit)
 		}
 		
 		heartRateTF.endEditing(true)
@@ -167,6 +177,12 @@ class HeartRateVC: UIViewController {
 	
 	@objc func doneEnergyExpendedTF(_ sender: UIBarButtonItem) {
 		energyExpended = UInt16(heartRateTF.text ?? "0") ?? 0
+		if energyExpended > 0 {
+			heartRateFlags.update(with: .energyExpended)
+		}
+		else {
+			heartRateFlags.remove(.energyExpended)
+		}
 		
 		energyExpendedTF.endEditing(true)
 	}
