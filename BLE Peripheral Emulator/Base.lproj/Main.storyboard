@@ -383,6 +383,7 @@
                         <outlet property="energyExpendedTF" destination="uet-mv-CEw" id="1Kl-Zz-hOT"/>
                         <outlet property="heartRateTF" destination="j08-Hc-6Fs" id="Us7-RC-QCF"/>
                         <outlet property="peripheralsConnected" destination="moC-Qk-kse" id="Ika-jQ-BXZ"/>
+                        <outlet property="stackViewTopConstraint" destination="4ob-4h-eXe" id="GXi-pi-IJA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mdP-0q-xbX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -531,6 +532,7 @@
                         <outlet property="advertisingSwitch" destination="Fkj-XS-Toi" id="sTC-bi-F8s"/>
                         <outlet property="measurementIntervalTF" destination="qmE-Ge-Rge" id="oGf-ov-7fU"/>
                         <outlet property="peripheralsConnected" destination="ytq-nI-1ed" id="yQf-XZ-OEP"/>
+                        <outlet property="stackViewTopConstraint" destination="YRz-Th-E9v" id="UFD-jv-eye"/>
                         <outlet property="tempatureTF" destination="KmG-UC-tam" id="8fS-sl-34T"/>
                     </connections>
                 </viewController>

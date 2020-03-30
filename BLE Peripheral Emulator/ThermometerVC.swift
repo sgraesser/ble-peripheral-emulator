@@ -36,7 +36,9 @@ class ThermometerVC: UIViewController {
 	@IBOutlet var peripheralsConnected: UILabel!
 	@IBOutlet var tempatureTF: UITextField!
 	@IBOutlet var measurementIntervalTF: UITextField!
+	@IBOutlet var stackViewTopConstraint: NSLayoutConstraint!
 	
+	private var topConstraintValue: CGFloat = 0
 	private var activeTextField: UITextField!
 	private let numberFormatter = NumberFormatter()
 
@@ -59,14 +61,15 @@ class ThermometerVC: UIViewController {
 		measurementIntervalTF.inputAccessoryView = createAccessoryToolbar(with: #selector(doneMeasurementIntervalTF(_:)))
 		tempatureTF.delegate = self
 		measurementIntervalTF.delegate = self
+		topConstraintValue = stackViewTopConstraint.constant
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
 		let center = NotificationCenter.default
-		center.addObserver(self, selector: #selector(keyboardDidShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-		center.addObserver(self, selector: #selector(keyboardDidHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+		center.addObserver(self, selector: #selector(keyboardWasShown(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+		center.addObserver(self, selector: #selector(keyboardWillBeHidden(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -205,12 +208,14 @@ class ThermometerVC: UIViewController {
 		tempatureTF.endEditing(true)
 	}
 	
-	@objc func keyboardDidShow(_ notification: Notification) {
+	// Called when the UIKeyboardDidShowNotification is sent.
+	@objc func keyboardWasShown(_ notification: Notification) {
 		guard
 			let info = notification.userInfo as? [String: Any],
 			let keyboardRect = info[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+			let duration = info[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
 			activeTextField != nil,
-			self.view.frame.origin.y >= 0 else {
+			topConstraintValue == stackViewTopConstraint.constant else {
 			return
 		}
 		
@@ -221,18 +226,22 @@ class ThermometerVC: UIViewController {
 		
 		// Checking if the text field is really hidden behind the keyboard
 		if !aRect.contains(testFrame.origin) {
-			UIView.animate(withDuration: 0.25, delay: 0.0, options: .curveEaseIn, animations: {
-				let bounds = self.view.bounds
+			UIView.animate(withDuration: duration, delay: 0.0, options: .curveEaseIn, animations: {
 				let y = self.view.frame.origin.y - (testFrame.origin.y - newTextFieldY)
-				self.view.frame = CGRect(x: 0, y: y, width: bounds.width, height: bounds.height)
+				self.stackViewTopConstraint.constant = self.topConstraintValue + y
 			}, completion: nil)
 		}
 	}
 	
-	@objc func keyboardDidHide(_ notification: Notification) {
-		UIView.animate(withDuration: 0.25, delay: 0.0, options: .curveEaseIn, animations: {
-			let bounds = self.view.bounds
-			self.view.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
+	// Called when the UIKeyboardWillHideNotification is sent
+	@objc func keyboardWillBeHidden(_ notification: Notification) {
+		guard
+			let info = notification.userInfo as? [String: Any],
+			let duration = info[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else {
+			return
+		}
+		UIView.animate(withDuration: duration, delay: 0.0, options: .curveEaseIn, animations: {
+			self.stackViewTopConstraint.constant = self.topConstraintValue
 		}, completion: nil)
 	}
 }
