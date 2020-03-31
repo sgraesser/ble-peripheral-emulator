@@ -18,6 +18,11 @@ class ViewController: UIViewController {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
 		battery.isHidden = true
+		
+		// Make our button corners rounded
+		battery.layer.cornerRadius = 4
+		heartRateMonitor.layer.cornerRadius = 4
+		healthThermometer.layer.cornerRadius = 4
 	}
 
 }

@@ -15,11 +15,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="Mdx-pO-PL2">
-                                <rect key="frame" x="103.5" y="297.5" width="168" height="116"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="Mdx-pO-PL2">
+                                <rect key="frame" x="83.5" y="292.5" width="208" height="126"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HNa-Qz-3uc">
-                                        <rect key="frame" x="0.0" y="0.0" width="168" height="34"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="208" height="34"/>
                                         <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <state key="normal" title="Battery">
@@ -30,7 +30,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C44-aH-xWe">
-                                        <rect key="frame" x="0.0" y="41" width="168" height="34"/>
+                                        <rect key="frame" x="0.0" y="46" width="208" height="34"/>
                                         <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Heart Rate Monitor"/>
                                         <connections>
@@ -38,8 +38,9 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tYR-5u-3MY">
-                                        <rect key="frame" x="0.0" y="82" width="168" height="34"/>
+                                        <rect key="frame" x="0.0" y="92" width="208" height="34"/>
                                         <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <inset key="contentEdgeInsets" minX="20" minY="6" maxX="20" maxY="6"/>
                                         <state key="normal" title="Health Thermometer"/>
                                         <connections>
                                             <segue destination="Mgi-Rr-Lej" kind="show" identifier="MainToThermometer" id="0xO-BK-l1q"/>
