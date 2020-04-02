@@ -49,8 +49,9 @@ class ThermometerVC: UIViewController {
 		peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
 		
 		htService = CBMutableService(type: healthThermometerService, primary: true)
-		htMeasurementCharacteristic = CBMutableCharacteristic(type: heartRateMeasurementUUID, properties: [.read, .notify], value: nil, permissions: .readable)
-		htService.characteristics = [htMeasurementCharacteristic]
+		htMeasurementCharacteristic = CBMutableCharacteristic(type: tempatureMeasurementUUID, properties: [.read, .notify], value: nil, permissions: .readable)
+		htMeasurementIntervalCharacteristic = CBMutableCharacteristic(type: measurementIntervalUUID, properties: [.read], value: nil, permissions: .readable)
+		htService.characteristics = [htMeasurementCharacteristic, htMeasurementIntervalCharacteristic]
 
 		peripheralsConnected.text = String(connectedDevices.count)
 		let tempInF = convertCtoF(tempature)
@@ -94,6 +95,14 @@ class ThermometerVC: UIViewController {
 		value[2] = UInt8(mantissa >> 16)
 		value[3] = UInt8(mantissa >> 8)
 		value[4] = UInt8(mantissa & 0xFF)
+		
+		return value
+	}
+	
+	private func convertMeasurementInterval() -> Data {
+		var value = Data(count: 2)
+		value[0] = UInt8(measurementInterval >> 8)
+		value[1] = UInt8(measurementInterval & 0xFF)
 		
 		return value
 	}
@@ -281,6 +290,9 @@ extension ThermometerVC: CBPeripheralManagerDelegate {
 		var value = Data(count: 1)
 		if request.characteristic.uuid == htMeasurementCharacteristic.uuid {
 			value = convertTempature()
+		}
+		else if request.characteristic.uuid == htMeasurementIntervalCharacteristic.uuid {
+			value = convertMeasurementInterval()
 		}
 		else {
 			peripheralManager.respond(to: request, withResult: .attributeNotFound)
