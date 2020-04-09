@@ -129,6 +129,58 @@ class ThermometerVC: UIViewController {
 		present(alert, animated: true, completion: nil)
 	}
 
+	func validateNumberEntry(_ textField: UITextField, range: ClosedRange<Int>, previousValue: String) -> Result<NSNumber, Error> {
+		guard let aNumber = numberFormatter.number(from: textField.text!),
+			range ~= aNumber.intValue else {
+			let msg = "Invalid number entered. Please enter a number between \(range.lowerBound) and \(range.upperBound)"
+			invalidNumberAlert(msg) { (action) in
+				textField.text = previousValue
+			}
+			
+			return .failure(ValidationError.outOfRange)
+		}
+		
+		return .success(aNumber)
+	}
+	
+	func updateTempature() -> Bool {
+		var isValid = true
+		
+		let tempInF = self.convertCtoF(self.tempature)
+		let currentValue = String(format: "%.1f", tempInF)
+		let range = 0...1000
+		let result = validateNumberEntry(tempatureTF, range: range, previousValue: currentValue)
+		switch result {
+		case .success(let aNumber):
+			let tempInF = aNumber.floatValue
+			tempature = convertFtoC(tempInF)
+			
+			// Update the display to show only 1 number after the decimal point
+			tempatureTF.text = String(format: "%.1f", tempInF)
+		case .failure(let error):
+			print(error.localizedDescription)
+			isValid = false
+		}
+		
+		return isValid
+	}
+	
+	func updateMeasurementInterval() -> Bool {
+		var isValid = true
+		
+		let range = 1...65535
+		let result = validateNumberEntry(measurementIntervalTF, range: range, previousValue: String(measurementInterval))
+		switch result {
+		case .success(let aNumber):
+			measurementInterval = aNumber.uint16Value
+		case .failure(let error):
+			print(error.localizedDescription)
+			isValid = false
+		}
+		
+		return isValid
+	}
+
     /*
     // MARK: - Navigation
 
@@ -180,41 +232,17 @@ class ThermometerVC: UIViewController {
 	// MARK: - Selector methods
 	
 	@objc func doneMeasurementIntervalTF(_ sender: UIBarButtonItem) {
-		let range = 1...65535
-		guard let aNumber = numberFormatter.number(from: measurementIntervalTF.text!),
-			range ~= aNumber.intValue else {
-			let msg = "Invalid number entered. Please enter a number between \(range.lowerBound) and \(range.upperBound)"
-			invalidNumberAlert(msg) { (action) in
-				self.measurementIntervalTF.text = String(self.measurementInterval)
-			}
-			
-			return
+		let validValue = updateMeasurementInterval()
+		if validValue {
+			measurementIntervalTF.endEditing(true)
 		}
-		measurementInterval = aNumber.uint16Value
-
-		measurementIntervalTF.endEditing(true)
 	}
 	
 	@objc func doneTempatureTF(_ sender: UIBarButtonItem) {
-		let range = 0.0..<1000.0
-		guard let aNumber = numberFormatter.number(from: tempatureTF.text!),
-			range ~= aNumber.doubleValue else {
-			let msg = "Invalid number entered. Please enter a number between \(range.lowerBound) and \(range.upperBound)"
-			invalidNumberAlert(msg) { (action) in
-				let tempInF = self.convertCtoF(self.tempature)
-				self.tempatureTF.text = String(format: "%.1f", tempInF)
-			}
-			
-			return
+		let validValue = updateTempature()
+		if validValue {
+			tempatureTF.endEditing(true)
 		}
-		let tempInF = aNumber.floatValue
-		tempature = convertFtoC(tempInF)
-		
-		// Update the display to show only 1 number after the decimal point
-		tempatureTF.text = String(format: "%.1f", tempInF)
-		measurementIntervalTF.text = String(measurementInterval)
-
-		tempatureTF.endEditing(true)
 	}
 	
 	// Called when the UIKeyboardDidShowNotification is sent.
@@ -337,7 +365,17 @@ extension ThermometerVC: UITextFieldDelegate {
 	}
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		textField.resignFirstResponder()
-		return true
+		var shouldReturn = true
+		
+		if textField == tempatureTF {
+			shouldReturn = updateTempature()
+			textField.resignFirstResponder()
+		}
+		else if textField == measurementIntervalTF {
+			shouldReturn = updateMeasurementInterval()
+			textField.resignFirstResponder()
+		}
+		
+		return shouldReturn
 	}
 }

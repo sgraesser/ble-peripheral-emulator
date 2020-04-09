@@ -13,6 +13,10 @@ let heartRateService = CBUUID(string: "180D")
 let heartRateMeasurementUUID = CBUUID(string: "2A37")
 let heartRateSensorLocationUUID = CBUUID(string: "2A38")
 
+enum ValidationError: Error {
+	case outOfRange
+}
+
 struct HRMFlagOptions: OptionSet {
 	let rawValue: UInt8
 	
@@ -127,6 +131,64 @@ class HeartRateVC: UIViewController {
 		present(alert, animated: true, completion: nil)
 	}
 
+	func validateNumberEntry(_ textField: UITextField, range: ClosedRange<Int>, previousValue: String) -> Result<NSNumber, Error> {
+		guard let aNumber = numberFormatter.number(from: textField.text!),
+			range ~= aNumber.intValue else {
+			let msg = "Invalid number entered. Please enter a number between \(range.lowerBound) and \(range.upperBound)"
+			invalidNumberAlert(msg) { (action) in
+				textField.text = previousValue
+			}
+			
+			return .failure(ValidationError.outOfRange)
+		}
+		
+		return .success(aNumber)
+	}
+	
+	func updateHeartRate() -> Bool {
+		var isValid = true
+		
+		let range = 1...65535
+		let result = validateNumberEntry(heartRateTF, range: range, previousValue: String(heartRate))
+		switch result {
+		case .success(let aNumber):
+			heartRate = aNumber.uint16Value
+			if heartRate > 255 {
+				heartRateFlags.update(with: .bpm16Bit)
+			}
+			else {
+				heartRateFlags.remove(.bpm16Bit)
+			}
+		case .failure(let error):
+			print(error.localizedDescription)
+			isValid = false
+		}
+		
+		return isValid
+	}
+	
+	func updateEnergyExpended() -> Bool {
+		var isValid = true
+		
+		let range = 1...65535
+		let result = validateNumberEntry(energyExpendedTF, range: range, previousValue: String(energyExpended))
+		switch result {
+		case .success(let aNumber):
+			energyExpended = aNumber.uint16Value
+			if energyExpended > 0 {
+				heartRateFlags.update(with: .energyExpended)
+			}
+			else {
+				heartRateFlags.remove(.energyExpended)
+			}
+		case .failure(let error):
+			print(error.localizedDescription)
+			isValid = false
+		}
+		
+		return isValid
+	}
+
     /*
     // MARK: - Navigation
 
@@ -200,47 +262,17 @@ class HeartRateVC: UIViewController {
 	}
 	
 	@objc func doneHeartRateTF(_ sender: UIBarButtonItem) {
-		let range = 1...65535
-		guard let aNumber = numberFormatter.number(from: heartRateTF.text!),
-			range ~= aNumber.intValue else {
-			let msg = "Invalid number entered. Please enter a number between \(range.lowerBound) and \(range.upperBound)"
-			invalidNumberAlert(msg) { (action) in
-				self.heartRateTF.text = String(self.heartRate)
-			}
-			
-			return
+		let validValue = updateHeartRate()
+		if validValue {
+			heartRateTF.endEditing(true)
 		}
-		heartRate = aNumber.uint16Value
-		if heartRate > 255 {
-			heartRateFlags.update(with: .bpm16Bit)
-		}
-		else {
-			heartRateFlags.remove(.bpm16Bit)
-		}
-		
-		heartRateTF.endEditing(true)
 	}
 	
 	@objc func doneEnergyExpendedTF(_ sender: UIBarButtonItem) {
-		let range = 0...65535
-		guard let aNumber = numberFormatter.number(from: energyExpendedTF.text!),
-			range ~= aNumber.intValue else {
-			let msg = "Invalid number entered. Please enter a number between \(range.lowerBound) and \(range.upperBound)"
-			invalidNumberAlert(msg) { (action) in
-				self.energyExpendedTF.text = String(self.energyExpended)
-			}
-		
-			return
+		let validValue = updateEnergyExpended()
+		if validValue {
+			energyExpendedTF.endEditing(true)
 		}
-		energyExpended = aNumber.uint16Value
-		if energyExpended > 0 {
-			heartRateFlags.update(with: .energyExpended)
-		}
-		else {
-			heartRateFlags.remove(.energyExpended)
-		}
-		
-		energyExpendedTF.endEditing(true)
 	}
 	
 	// Called when the UIKeyboardDidShowNotification is sent.
@@ -396,7 +428,17 @@ extension HeartRateVC: UITextFieldDelegate {
 	}
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		textField.resignFirstResponder()
-		return true
+		var shouldReturn = true
+		
+		if textField == heartRateTF {
+			shouldReturn = updateHeartRate()
+			textField.resignFirstResponder()
+		}
+		else if textField == energyExpendedTF {
+			shouldReturn = updateEnergyExpended()
+			textField.resignFirstResponder()
+		}
+		
+		return shouldReturn
 	}
 }
