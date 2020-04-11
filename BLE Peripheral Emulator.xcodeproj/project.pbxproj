@@ -107,7 +107,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1130;
-				ORGANIZATIONNAME = "Steve Graesser";
+				ORGANIZATIONNAME = "White Lab Consulting";
 				TargetAttributes = {
 					AA763835241EF10700FDFAC2 = {
 						CreatedOnToolsVersion = 11.3.1;

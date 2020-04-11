@@ -3,7 +3,7 @@
 //  BLE Peripheral Emulator
 //
 //  Created by Steve Graesser on 3/28/20.
-//  Copyright © 2020 Steve Graesser. All rights reserved.
+//  Copyright © 2020 White Lab Consulting. All rights reserved.
 //
 
 import UIKit
