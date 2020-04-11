@@ -16,7 +16,7 @@ class BatteryServiceVC: UIViewController {
 	private var peripheralManager: CBPeripheralManager!
 	
 	private var batteryLevel: UInt8 = 50
-	private var connectedDevices = 0
+	private var connectedDevices = [CBCentral]()
 	private var batteryService: CBMutableService!
 	private var batteryLevelCharacteristic: CBMutableCharacteristic!
 
@@ -35,7 +35,7 @@ class BatteryServiceVC: UIViewController {
 		batteryLevelCharacteristic = CBMutableCharacteristic(type: batteryLevelUUID, properties: .read, value: nil, permissions: .readable)
 		batteryService.characteristics = [batteryLevelCharacteristic]
 		
-		peripheralsConnected.text = String(connectedDevices)
+		peripheralsConnected.text = String(connectedDevices.count)
 		batteryLevelSlider.value = Float(batteryLevel)/100.0
 		batteryLevelLabel.text = String(batteryLevel)
     }
@@ -59,6 +59,9 @@ class BatteryServiceVC: UIViewController {
 			print("Advertising service stopped")
 			peripheralManager.stopAdvertising()
 			peripheralManager.remove(batteryService)
+			
+			connectedDevices.removeAll()
+			peripheralsConnected.text = String(connectedDevices.count)
 		}
 	}
 	
