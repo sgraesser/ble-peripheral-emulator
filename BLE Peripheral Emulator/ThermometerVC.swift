@@ -107,11 +107,17 @@ class ThermometerVC: UIViewController {
 		return value
 	}
 	
+	/// Simple conversion of celsius to farenheit
+	/// - Parameter tempInC: tempature in celsius
+	/// - Returns: tempature in farenheit
 	private func convertCtoF(_ tempInC: Float) -> Float {
 		let x = (tempInC + 40) * (9/5) - 40
 		return x
 	}
 	
+	/// Simple conversion of farenheit to celsius
+	/// - Parameter tempInC: tempature in farenheit
+	/// - Returns: tempature in celsius
 	private func convertFtoC(_ tempInF: Float) -> Float {
 		let x = (tempInF + 40) * (5/9) - 40
 		return x
@@ -129,6 +135,12 @@ class ThermometerVC: UIViewController {
 		present(alert, animated: true, completion: nil)
 	}
 
+	/// Validates the string entered into a UITextField
+	/// - Parameters:
+	///   - textField: the text field text to validate
+	///   - range: the valid range for the number
+	///   - previousValue: the string to restore the text field to in case validation fails
+	/// - Returns: result of validation
 	func validateNumberEntry(_ textField: UITextField, range: ClosedRange<Int>, previousValue: String) -> Result<NSNumber, Error> {
 		guard let aNumber = numberFormatter.number(from: textField.text!),
 			range ~= aNumber.intValue else {
@@ -143,6 +155,8 @@ class ThermometerVC: UIViewController {
 		return .success(aNumber)
 	}
 	
+	/// Updates the tempature value after validating the input string
+	/// - Returns: true if the number is valid
 	func updateTempature() -> Bool {
 		var isValid = true
 		
@@ -165,6 +179,8 @@ class ThermometerVC: UIViewController {
 		return isValid
 	}
 	
+	/// Updates the measurement interval value after validating the input string
+	/// - Returns: true if the number is valid
 	func updateMeasurementInterval() -> Bool {
 		var isValid = true
 		

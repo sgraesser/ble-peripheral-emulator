@@ -131,6 +131,12 @@ class HeartRateVC: UIViewController {
 		present(alert, animated: true, completion: nil)
 	}
 
+	/// Validates the string entered into a UITextField
+	/// - Parameters:
+	///   - textField: the text field text to validate
+	///   - range: the valid range for the number
+	///   - previousValue: the string to restore the text field to in case validation fails
+	/// - Returns: result of validation
 	func validateNumberEntry(_ textField: UITextField, range: ClosedRange<Int>, previousValue: String) -> Result<NSNumber, Error> {
 		guard let aNumber = numberFormatter.number(from: textField.text!),
 			range ~= aNumber.intValue else {
@@ -145,6 +151,8 @@ class HeartRateVC: UIViewController {
 		return .success(aNumber)
 	}
 	
+	/// Updates the heart rate value after validating the input string
+	/// - Returns: true if the number is valid
 	func updateHeartRate() -> Bool {
 		var isValid = true
 		
@@ -167,6 +175,8 @@ class HeartRateVC: UIViewController {
 		return isValid
 	}
 	
+	/// Updates the energy expended value after validating the input string
+	/// - Returns: true if the number is valid
 	func updateEnergyExpended() -> Bool {
 		var isValid = true
 		
