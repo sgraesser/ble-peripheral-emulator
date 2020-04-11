@@ -10,22 +10,22 @@ import UIKit
 import CoreBluetooth
 
 let healthThermometerService = CBUUID(string: "1809")
-let tempatureMeasurementUUID = CBUUID(string: "2A1C")
+let temperatureMeasurementUUID = CBUUID(string: "2A1C")
 let measurementIntervalUUID = CBUUID(string: "2A21")
 
 struct TMFlagOptions: OptionSet {
 	let rawValue: UInt8
 	
-	static let tempatureInF		= TMFlagOptions(rawValue: 1 << 0)
+	static let temperatureInF	= TMFlagOptions(rawValue: 1 << 0)
 	static let timeStamp		= TMFlagOptions(rawValue: 1 << 1)
-	static let tempatureType	= TMFlagOptions(rawValue: 1 << 2)
+	static let temperatureType	= TMFlagOptions(rawValue: 1 << 2)
 }
 
 class ThermometerVC: UIViewController {
 	private var peripheralManager: CBPeripheralManager!
 	
-	private var tempature: Float = 36.4		// Store internally as C
-	private var tempatureFlags: TMFlagOptions = []
+	private var temperature: Float = 36.4		// Store internally as C
+	private var temperatureFlags: TMFlagOptions = []
 	private var measurementInterval: UInt16 = 1
 	private var connectedDevices = [CBCentral]()
 	private var htService: CBMutableService!
@@ -34,7 +34,7 @@ class ThermometerVC: UIViewController {
 	
 	@IBOutlet var advertisingSwitch: UISwitch!
 	@IBOutlet var peripheralsConnected: UILabel!
-	@IBOutlet var tempatureTF: UITextField!
+	@IBOutlet var temperatureTF: UITextField!
 	@IBOutlet var measurementIntervalTF: UITextField!
 	@IBOutlet var stackViewTopConstraint: NSLayoutConstraint!
 	
@@ -49,18 +49,18 @@ class ThermometerVC: UIViewController {
 		peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
 		
 		htService = CBMutableService(type: healthThermometerService, primary: true)
-		htMeasurementCharacteristic = CBMutableCharacteristic(type: tempatureMeasurementUUID, properties: [.read, .notify], value: nil, permissions: .readable)
+		htMeasurementCharacteristic = CBMutableCharacteristic(type: temperatureMeasurementUUID, properties: [.read, .notify], value: nil, permissions: .readable)
 		htMeasurementIntervalCharacteristic = CBMutableCharacteristic(type: measurementIntervalUUID, properties: [.read], value: nil, permissions: .readable)
 		htService.characteristics = [htMeasurementCharacteristic, htMeasurementIntervalCharacteristic]
 
 		peripheralsConnected.text = String(connectedDevices.count)
-		let tempInF = convertCtoF(tempature)
-		tempatureTF.text = String(format: "%.1f", tempInF)
+		let tempInF = convertCtoF(temperature)
+		temperatureTF.text = String(format: "%.1f", tempInF)
 		measurementIntervalTF.text = String(measurementInterval)
 			
-		tempatureTF.inputAccessoryView = createAccessoryToolbar(with: #selector(doneTempatureTF(_:)))
+		temperatureTF.inputAccessoryView = createAccessoryToolbar(with: #selector(doneTemperatureTF(_:)))
 		measurementIntervalTF.inputAccessoryView = createAccessoryToolbar(with: #selector(doneMeasurementIntervalTF(_:)))
-		tempatureTF.delegate = self
+		temperatureTF.delegate = self
 		measurementIntervalTF.delegate = self
 		topConstraintValue = stackViewTopConstraint.constant
 	}
@@ -85,12 +85,12 @@ class ThermometerVC: UIViewController {
 	
 	/// Converts a Float value to a 32-bit floating point data type as described in IEEE 11073
 	/// - Returns: floating point data representation
-	private func convertTempature() -> Data {
+	private func convertTemperature() -> Data {
 		let exponent:UInt8 = 0xFF
-		let mantissa:Int = lroundf(tempature * 10)
+		let mantissa:Int = lroundf(temperature * 10)
 		
 		var value = Data(count: 5)
-		value[0] = tempatureFlags.rawValue
+		value[0] = temperatureFlags.rawValue
 		value[1] = exponent
 		value[2] = UInt8(mantissa >> 16)
 		value[3] = UInt8(mantissa >> 8)
@@ -108,16 +108,16 @@ class ThermometerVC: UIViewController {
 	}
 	
 	/// Simple conversion of celsius to farenheit
-	/// - Parameter tempInC: tempature in celsius
-	/// - Returns: tempature in farenheit
+	/// - Parameter tempInC: temperature in celsius
+	/// - Returns: temperature in farenheit
 	private func convertCtoF(_ tempInC: Float) -> Float {
 		let x = (tempInC + 40) * (9/5) - 40
 		return x
 	}
 	
 	/// Simple conversion of farenheit to celsius
-	/// - Parameter tempInC: tempature in farenheit
-	/// - Returns: tempature in celsius
+	/// - Parameter tempInC: temperature in farenheit
+	/// - Returns: temperature in celsius
 	private func convertFtoC(_ tempInF: Float) -> Float {
 		let x = (tempInF + 40) * (5/9) - 40
 		return x
@@ -155,22 +155,22 @@ class ThermometerVC: UIViewController {
 		return .success(aNumber)
 	}
 	
-	/// Updates the tempature value after validating the input string
+	/// Updates the temperature value after validating the input string
 	/// - Returns: true if the number is valid
-	func updateTempature() -> Bool {
+	func updateTemperature() -> Bool {
 		var isValid = true
 		
-		let tempInF = self.convertCtoF(self.tempature)
+		let tempInF = self.convertCtoF(self.temperature)
 		let currentValue = String(format: "%.1f", tempInF)
 		let range = 0...1000
-		let result = validateNumberEntry(tempatureTF, range: range, previousValue: currentValue)
+		let result = validateNumberEntry(temperatureTF, range: range, previousValue: currentValue)
 		switch result {
 		case .success(let aNumber):
 			let tempInF = aNumber.floatValue
-			tempature = convertFtoC(tempInF)
+			temperature = convertFtoC(tempInF)
 			
 			// Update the display to show only 1 number after the decimal point
-			tempatureTF.text = String(format: "%.1f", tempInF)
+			temperatureTF.text = String(format: "%.1f", tempInF)
 		case .failure(let error):
 			print(error.localizedDescription)
 			isValid = false
@@ -224,7 +224,7 @@ class ThermometerVC: UIViewController {
 	}
 
 	@IBAction func notifyTapped(_ sender: UIButton) {
-		let value = convertTempature()
+		let value = convertTemperature()
 		_ = peripheralManager.updateValue(value, for: htMeasurementCharacteristic, onSubscribedCentrals: connectedDevices)
 	}
 	
@@ -254,10 +254,10 @@ class ThermometerVC: UIViewController {
 		}
 	}
 	
-	@objc func doneTempatureTF(_ sender: UIBarButtonItem) {
-		let validValue = updateTempature()
+	@objc func doneTemperatureTF(_ sender: UIBarButtonItem) {
+		let validValue = updateTemperature()
 		if validValue {
-			tempatureTF.endEditing(true)
+			temperatureTF.endEditing(true)
 		}
 	}
 	
@@ -333,7 +333,7 @@ extension ThermometerVC: CBPeripheralManagerDelegate {
 	func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
 		var value = Data(count: 1)
 		if request.characteristic.uuid == htMeasurementCharacteristic.uuid {
-			value = convertTempature()
+			value = convertTemperature()
 		}
 		else if request.characteristic.uuid == htMeasurementIntervalCharacteristic.uuid {
 			value = convertMeasurementInterval()
@@ -357,7 +357,7 @@ extension ThermometerVC: CBPeripheralManagerDelegate {
 			peripheralsConnected.text = String(connectedDevices.count)
 			
 			if characteristic == htMeasurementCharacteristic {
-				let value = convertTempature()
+				let value = convertTemperature()
 				_ = peripheral.updateValue(value, for: htMeasurementCharacteristic, onSubscribedCentrals: connectedDevices)
 			}
 		}
@@ -383,8 +383,8 @@ extension ThermometerVC: UITextFieldDelegate {
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		var shouldReturn = true
 		
-		if textField == tempatureTF {
-			shouldReturn = updateTempature()
+		if textField == temperatureTF {
+			shouldReturn = updateTemperature()
 			textField.resignFirstResponder()
 		}
 		else if textField == measurementIntervalTF {

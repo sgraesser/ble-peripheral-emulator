@@ -459,7 +459,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="4zR-Qx-dQM">
-                                        <rect key="frame" x="0.0" y="201.5" width="252.5" height="76"/>
+                                        <rect key="frame" x="0.0" y="201.5" width="264.5" height="76"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Health Thermometer Service" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i44-Fe-zOn">
                                                 <rect key="frame" x="0.0" y="0.0" width="197.5" height="18"/>
@@ -468,26 +468,26 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="buz-Gm-3V6">
-                                                <rect key="frame" x="0.0" y="24" width="252.5" height="52"/>
+                                                <rect key="frame" x="0.0" y="24" width="264.5" height="52"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="ZSC-RV-C7l">
-                                                        <rect key="frame" x="0.0" y="0.0" width="91" height="52"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="103" height="52"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Tempature (ºF)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="be9-cX-S6v">
-                                                                <rect key="frame" x="0.0" y="0.0" width="91" height="16"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Temperature (ºF)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="be9-cX-S6v">
+                                                                <rect key="frame" x="0.0" y="0.0" width="103" height="16"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="60" borderStyle="line" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KmG-UC-tam">
-                                                                <rect key="frame" x="0.0" y="24" width="91" height="28"/>
+                                                                <rect key="frame" x="0.0" y="24" width="103" height="28"/>
                                                                 <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="15"/>
                                                                 <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                                             </textField>
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Hkc-mx-Rrf">
-                                                        <rect key="frame" x="101" y="0.0" width="151.5" height="52"/>
+                                                        <rect key="frame" x="113" y="0.0" width="151.5" height="52"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Measurement Interval (s)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="obT-1W-cmu">
                                                                 <rect key="frame" x="0.0" y="0.0" width="151.5" height="16"/>
@@ -534,7 +534,7 @@
                         <outlet property="measurementIntervalTF" destination="qmE-Ge-Rge" id="oGf-ov-7fU"/>
                         <outlet property="peripheralsConnected" destination="ytq-nI-1ed" id="yQf-XZ-OEP"/>
                         <outlet property="stackViewTopConstraint" destination="YRz-Th-E9v" id="UFD-jv-eye"/>
-                        <outlet property="tempatureTF" destination="KmG-UC-tam" id="8fS-sl-34T"/>
+                        <outlet property="temperatureTF" destination="KmG-UC-tam" id="8fS-sl-34T"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Aug-Qo-b33" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
