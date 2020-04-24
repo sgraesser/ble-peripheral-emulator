@@ -8,15 +8,14 @@
 
 import Foundation
 
-class Temperature {
+struct Temperature: Equatable {
 	var celsius: Double = 0
-	var fahrenheit: Double { return celsius * 9 / 5 + 32 }
-	
-	init(celsius: Double) {
-		self.celsius = celsius
+	var fahrenheit: Double {
+		get { return celsius * 9 / 5 + 32 }
+		set { celsius = (newValue - 32) * 5 / 9 }
 	}
-	
-	init(fahrenheit: Double) {
-		self.celsius = (fahrenheit - 32) * 5 / 9
-	}
+}
+
+func ==(lhs: Temperature, rhs: Temperature) -> Bool {
+	return lhs.celsius == rhs.celsius
 }

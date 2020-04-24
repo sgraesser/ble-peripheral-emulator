@@ -148,7 +148,7 @@ class ThermometerVC: UIViewController {
 		let result = validateNumberEntry(temperatureTF, range: range, previousValue: currentValue)
 		switch result {
 		case .success(let aNumber):
-			temperature = Temperature(fahrenheit: aNumber.doubleValue)
+			temperature.fahrenheit = aNumber.doubleValue
 			
 			// Update the display to show only 1 number after the decimal point
 			temperatureTF.text = String(format: "%.1f", temperature.fahrenheit)
