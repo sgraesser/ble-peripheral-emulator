@@ -24,7 +24,7 @@ struct TMFlagOptions: OptionSet {
 class ThermometerVC: UIViewController {
 	private var peripheralManager: CBPeripheralManager!
 	
-	private var temperature: Float = 36.4		// Store internally as C
+	private var temperature = Temperature(celsius: 36.4)
 	private var temperatureFlags: TMFlagOptions = []
 	private var measurementInterval: UInt16 = 1
 	private var connectedDevices = [CBCentral]()
@@ -54,8 +54,7 @@ class ThermometerVC: UIViewController {
 		htService.characteristics = [htMeasurementCharacteristic, htMeasurementIntervalCharacteristic]
 
 		peripheralsConnected.text = String(connectedDevices.count)
-		let tempInF = convertCtoF(temperature)
-		temperatureTF.text = String(format: "%.1f", tempInF)
+		temperatureTF.text = String(format: "%.1f", temperature.fahrenheit)
 		measurementIntervalTF.text = String(measurementInterval)
 			
 		temperatureTF.inputAccessoryView = createAccessoryToolbar(with: #selector(doneTemperatureTF(_:)))
@@ -87,7 +86,7 @@ class ThermometerVC: UIViewController {
 	/// - Returns: floating point data representation
 	private func convertTemperature() -> Data {
 		let exponent:UInt8 = 0xFF
-		let mantissa:Int = lroundf(temperature * 10)
+		let mantissa:Int = lround(temperature.celsius * 10)
 		
 		var value = Data(count: 5)
 		value[0] = temperatureFlags.rawValue
@@ -105,22 +104,6 @@ class ThermometerVC: UIViewController {
 		value[1] = UInt8(measurementInterval & 0xFF)
 		
 		return value
-	}
-	
-	/// Simple conversion of celsius to farenheit
-	/// - Parameter tempInC: temperature in celsius
-	/// - Returns: temperature in farenheit
-	private func convertCtoF(_ tempInC: Float) -> Float {
-		let x = (tempInC + 40) * (9/5) - 40
-		return x
-	}
-	
-	/// Simple conversion of farenheit to celsius
-	/// - Parameter tempInC: temperature in farenheit
-	/// - Returns: temperature in celsius
-	private func convertFtoC(_ tempInF: Float) -> Float {
-		let x = (tempInF + 40) * (5/9) - 40
-		return x
 	}
 	
 	/// Notifiy the user that an invalid number has been entered.
@@ -160,17 +143,15 @@ class ThermometerVC: UIViewController {
 	func updateTemperature() -> Bool {
 		var isValid = true
 		
-		let tempInF = self.convertCtoF(self.temperature)
-		let currentValue = String(format: "%.1f", tempInF)
+		let currentValue = String(format: "%.1f", temperature.fahrenheit)
 		let range = 0...1000
 		let result = validateNumberEntry(temperatureTF, range: range, previousValue: currentValue)
 		switch result {
 		case .success(let aNumber):
-			let tempInF = aNumber.floatValue
-			temperature = convertFtoC(tempInF)
+			temperature = Temperature(fahrenheit: aNumber.doubleValue)
 			
 			// Update the display to show only 1 number after the decimal point
-			temperatureTF.text = String(format: "%.1f", tempInF)
+			temperatureTF.text = String(format: "%.1f", temperature.fahrenheit)
 		case .failure(let error):
 			print(error.localizedDescription)
 			isValid = false
