@@ -17,7 +17,7 @@
 		AA763843241EF10900FDFAC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA763842241EF10900FDFAC2 /* Assets.xcassets */; };
 		AA763846241EF10900FDFAC2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA763844241EF10900FDFAC2 /* LaunchScreen.storyboard */; };
 		AA76384E241F204E00FDFAC2 /* BatteryServiceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA76384D241F204E00FDFAC2 /* BatteryServiceVC.swift */; };
-		AAA7943D2442570A003848DA /* ContactTracingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA7943C2442570A003848DA /* ContactTracingVC.swift */; };
+		AAA7943D2442570A003848DA /* ExposureNotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA7943C2442570A003848DA /* ExposureNotificationVC.swift */; };
 		AABBE6E1245299F200205B74 /* Temperature.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABBE6E0245299F200205B74 /* Temperature.swift */; };
 /* End PBXBuildFile section */
 
@@ -34,7 +34,7 @@
 		AA763845241EF10900FDFAC2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AA763847241EF10900FDFAC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA76384D241F204E00FDFAC2 /* BatteryServiceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryServiceVC.swift; sourceTree = "<group>"; };
-		AAA7943C2442570A003848DA /* ContactTracingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactTracingVC.swift; sourceTree = "<group>"; };
+		AAA7943C2442570A003848DA /* ExposureNotificationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureNotificationVC.swift; sourceTree = "<group>"; };
 		AABBE6E0245299F200205B74 /* Temperature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temperature.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,7 +74,7 @@
 				AA76383D241EF10700FDFAC2 /* ViewController.swift */,
 				AA76383F241EF10700FDFAC2 /* Main.storyboard */,
 				AA76384D241F204E00FDFAC2 /* BatteryServiceVC.swift */,
-				AAA7943C2442570A003848DA /* ContactTracingVC.swift */,
+				AAA7943C2442570A003848DA /* ExposureNotificationVC.swift */,
 				AA1B8C9F2431246900240D90 /* HeartRateVC.swift */,
 				AA1B8CA12431297D00240D90 /* ThermometerVC.swift */,
 				AABBE6E0245299F200205B74 /* Temperature.swift */,
@@ -159,7 +159,7 @@
 			files = (
 				AA76383E241EF10700FDFAC2 /* ViewController.swift in Sources */,
 				AABBE6E1245299F200205B74 /* Temperature.swift in Sources */,
-				AAA7943D2442570A003848DA /* ContactTracingVC.swift in Sources */,
+				AAA7943D2442570A003848DA /* ExposureNotificationVC.swift in Sources */,
 				AA1B8CA02431246900240D90 /* HeartRateVC.swift in Sources */,
 				AA76383A241EF10700FDFAC2 /* AppDelegate.swift in Sources */,
 				AA76384E241F204E00FDFAC2 /* BatteryServiceVC.swift in Sources */,

@@ -1,5 +1,5 @@
 //
-//  ContactTracingVC.swift
+//  ExposureNotificationVC.swift
 //  BLE Peripheral Emulator
 //
 //  Created by Steve Graesser on 4/11/20.
@@ -11,8 +11,10 @@ import CoreBluetooth
 
 let contactDetectionService = CBUUID(string: "FD6F")
 let contactDetectionUUID = CBUUID(string: "FD6F")
+let majorVersion: Int8 = 0x01
+let minorVersion: Int8 = 0x00
 
-class ContactTracingVC: UIViewController {
+class ExposureNotificationVC: UIViewController {
 	private var peripheralManager: CBPeripheralManager!
 	
 	private var tracingKey = ""
@@ -75,7 +77,7 @@ class ContactTracingVC: UIViewController {
 	}
 }
 
-extension ContactTracingVC: CBPeripheralManagerDelegate {
+extension ExposureNotificationVC: CBPeripheralManagerDelegate {
 	func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
 		switch peripheral.state {
 		case .poweredOn:
@@ -107,9 +109,15 @@ extension ContactTracingVC: CBPeripheralManagerDelegate {
 	}
 	
 	func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
-		var value = Data(count: 1)
+		var value = Data(count: 16)
 		if request.characteristic.uuid == cdProximityIdentifier.uuid {
 			value = proximityIdentifier.data
+			
+			var metaData = Data(count: 4)
+			metaData[0] = UInt8((majorVersion << 6) + (minorVersion << 4))
+			let transmitPower = Int8.random(in: -90 ... -50)
+			metaData[1] = UInt8(truncatingIfNeeded: transmitPower)
+			value.append(metaData)
 		}
 		
 		guard value.count > request.offset else {
