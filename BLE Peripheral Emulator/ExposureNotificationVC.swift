@@ -17,8 +17,8 @@ let minorVersion: Int8 = 0x00
 class ExposureNotificationVC: UIViewController {
 	private var peripheralManager: CBPeripheralManager!
 	
-	private var tracingKey = ""
-	private var dailyKey = ""
+	private var temporaryExposureKey = ""
+	private var diagnosisKey = ""
 	private var proximityIdentifier = CBUUID(nsuuid: UUID())
 	private var rotationInterval: UInt8 = 10
 	private var connectedDevices = [CBCentral]()
