@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreBluetooth
+import os
 
 let heartRateService = CBUUID(string: "180D")
 let heartRateMeasurementUUID = CBUUID(string: "2A37")
@@ -168,7 +169,7 @@ class HeartRateVC: UIViewController {
 				heartRateFlags.remove(.bpm16Bit)
 			}
 		case .failure(let error):
-			print(error.localizedDescription)
+			os_log(.error, "Error: %@", String(describing: error))
 			isValid = false
 		}
 		
@@ -192,7 +193,7 @@ class HeartRateVC: UIViewController {
 				heartRateFlags.remove(.energyExpended)
 			}
 		case .failure(let error):
-			print(error.localizedDescription)
+			os_log(.error, "Error: %@", String(describing: error))
 			isValid = false
 		}
 		
@@ -216,7 +217,7 @@ class HeartRateVC: UIViewController {
 			peripheralManager.add(hrmService)
 		}
 		else {
-			print("Advertising service stopped")
+			os_log(.debug, "Advertising service stopped")
 			peripheralManager.stopAdvertising()
 			peripheralManager.remove(hrmService)
 			
@@ -328,9 +329,9 @@ extension HeartRateVC: CBPeripheralManagerDelegate {
 	func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
 		switch peripheral.state {
 		case .poweredOn:
-			print("Bluetooth is On")
+			os_log(.debug, "Bluetooth is On")
 		default:
-			print("Bluetooth is not active")
+			os_log(.debug, "Bluetooth is not active")
 		}
 	}
 
@@ -342,16 +343,16 @@ extension HeartRateVC: CBPeripheralManagerDelegate {
 			peripheralManager.startAdvertising(advertisementData)
 		}
 		else {
-			print("Error publishing service: \(error?.localizedDescription ?? "unknown")")
+			os_log(.error, "Error publishing service: %@", String(describing: error))
 		}
 	}
 	
 	func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
 		if error == nil {
-			print("Advertising service started")
+			os_log(.debug, "Advertising service started")
 		}
 		else {
-			print("Error advertising service: \(error?.localizedDescription ?? "unknown")")
+			os_log(.error, "Error advertising service: %@", String(describing: error))
 		}
 	}
 	

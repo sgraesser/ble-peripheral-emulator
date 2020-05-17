@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreBluetooth
+import os
 
 let contactDetectionService = CBUUID(string: "FD6F")
 let contactDetectionUUID = CBUUID(string: "FD6F")
@@ -63,7 +64,7 @@ class ExposureNotificationVC: UIViewController {
 			peripheralManager.add(cdService)
 		}
 		else {
-			print("Advertising service stopped")
+			os_log(.debug, "Advertising service stopped")
 			peripheralManager.stopAdvertising()
 			peripheralManager.remove(cdService)
 			
@@ -81,9 +82,9 @@ extension ExposureNotificationVC: CBPeripheralManagerDelegate {
 	func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
 		switch peripheral.state {
 		case .poweredOn:
-			print("Bluetooth is On")
+			os_log(.debug, "Bluetooth is On")
 		default:
-			print("Bluetooth is not active")
+			os_log(.debug, "Bluetooth is not active")
 		}
 	}
 
@@ -95,16 +96,16 @@ extension ExposureNotificationVC: CBPeripheralManagerDelegate {
 			peripheralManager.startAdvertising(advertisementData)
 		}
 		else {
-			print("Error publishing service: \(error?.localizedDescription ?? "unknown")")
+			os_log(.error, "Error publishing service: %@", String(describing: error))
 		}
 	}
 	
 	func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
 		if error == nil {
-			print("Advertising service started")
+			os_log(.debug, "Advertising service started")
 		}
 		else {
-			print("Error advertising service: \(error?.localizedDescription ?? "unknown")")
+			os_log(.error, "Error advertising service: %@", String(describing: error))
 		}
 	}
 	

@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreBluetooth
+import os
 
 let healthThermometerService = CBUUID(string: "1809")
 let temperatureMeasurementUUID = CBUUID(string: "2A1C")
@@ -153,7 +154,7 @@ class ThermometerVC: UIViewController {
 			// Update the display to show only 1 number after the decimal point
 			temperatureTF.text = String(format: "%.1f", temperature.fahrenheit)
 		case .failure(let error):
-			print(error.localizedDescription)
+			os_log(.error, "Error: %@", String(describing: error))
 			isValid = false
 		}
 		
@@ -171,7 +172,7 @@ class ThermometerVC: UIViewController {
 		case .success(let aNumber):
 			measurementInterval = aNumber.uint16Value
 		case .failure(let error):
-			print(error.localizedDescription)
+			os_log(.error, "Error: %@", String(describing: error))
 			isValid = false
 		}
 		
@@ -195,7 +196,7 @@ class ThermometerVC: UIViewController {
 			peripheralManager.add(htService)
 		}
 		else {
-			print("Advertising service stopped")
+			os_log(.debug, "Advertising service stopped")
 			peripheralManager.stopAdvertising()
 			peripheralManager.remove(htService)
 			
@@ -284,9 +285,9 @@ extension ThermometerVC: CBPeripheralManagerDelegate {
 	func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
 		switch peripheral.state {
 		case .poweredOn:
-			print("Bluetooth is On")
+			os_log(.debug, "Bluetooth is On")
 		default:
-			print("Bluetooth is not active")
+			os_log(.debug, "Bluetooth is not active")
 		}
 	}
 
@@ -298,16 +299,16 @@ extension ThermometerVC: CBPeripheralManagerDelegate {
 			peripheralManager.startAdvertising(advertisementData)
 		}
 		else {
-			print("Error publishing service: \(error?.localizedDescription ?? "unknown")")
+			os_log(.error, "Error publishing service: %@", String(describing: error))
 		}
 	}
 	
 	func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
 		if error == nil {
-			print("Advertising service started")
+			os_log(.debug, "Advertising service started")
 		}
 		else {
-			print("Error advertising service: \(error?.localizedDescription ?? "unknown")")
+			os_log(.error, "Error advertising service: %@", String(describing: error))
 		}
 	}
 	
