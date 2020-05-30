@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreBluetooth
-import os
+import os.log
 
 let healthThermometerService = CBUUID(string: "1809")
 let temperatureMeasurementUUID = CBUUID(string: "2A1C")

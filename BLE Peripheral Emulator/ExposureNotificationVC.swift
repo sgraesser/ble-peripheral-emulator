@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreBluetooth
-import os
+import os.log
 
 let contactDetectionService = CBUUID(string: "FD6F")
 let contactDetectionUUID = CBUUID(string: "FD6F")

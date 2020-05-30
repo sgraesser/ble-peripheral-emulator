@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreBluetooth
-import os
+import os.log
 
 let heartRateService = CBUUID(string: "180D")
 let heartRateMeasurementUUID = CBUUID(string: "2A37")
