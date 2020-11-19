@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController {
 	
 	@IBOutlet var battery: UIButton!
+	@IBOutlet var exposureNotification: UIButton!
 	@IBOutlet var heartRateMonitor: UIButton!
 	@IBOutlet var healthThermometer: UIButton!
 
@@ -18,9 +19,14 @@ class ViewController: UIViewController {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
 		battery.isHidden = true
+		// Can only be shown on iOS 13.6 or earlier
+		let version = UIDevice.current.systemVersion
+		let hideEN = version.compare("13.6", options: .numeric) == .orderedDescending
+		exposureNotification.isHidden = hideEN
 		
 		// Make our button corners rounded
 		battery.layer.cornerRadius = 4
+		exposureNotification.layer.cornerRadius = 4
 		heartRateMonitor.layer.cornerRadius = 4
 		healthThermometer.layer.cornerRadius = 4
 	}
